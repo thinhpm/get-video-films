@@ -92,23 +92,23 @@ def get_video(url, file_name):
 
 if __name__ == "__main__":
     # url = str(input("Enter url video: "))
-    url = "https://www.watchlakorn.in/%E0%B8%81%E0%B8%A5%E0%B8%A5%E0%B8%A7%E0%B8%87%E0%B8%97%E0%B8%A7%E0%B8%87%E0%B8%AB%E0%B8%99%E0%B8%B5%E0%B9%89%E0%B8%A3%E0%B8%B1%E0%B8%81%E0%B8%95%E0%B8%AD%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%884%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%8815%E0%B8%81%E0%B8%B8%E0%B8%A1%E0%B8%A0%E0%B8%B2%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B8%98%E0%B9%8C2562-video-262570"
+    url = "https://www.watchlakorn.in/%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%81%E0%B8%A9%E0%B9%8C%E0%B8%9E%E0%B8%B4%E0%B8%97%E0%B8%B1%E0%B8%81%E0%B8%A9%E0%B9%8C%E0%B8%8B%E0%B8%B8%E0%B8%99%E0%B8%A2%E0%B8%B1%E0%B8%94%E0%B9%80%E0%B8%8B%E0%B9%87%E0%B8%99%E0%B8%95%E0%B8%AD%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%885%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%8820%E0%B8%81%E0%B8%B8%E0%B8%A1%E0%B8%A0%E0%B8%B2%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B8%98%E0%B9%8C2562-video-263371"
 
     start = datetime.datetime.now()
 
     result = getPlayList(url)
     print("Downloading...")
     for i in range(len(result)):
-        if i > 20:
-            break
+        # if i > 10:
+        #     break
         os.system('youtube-dl ' + result[i] + ' --output downloads\\' + str(i + 1) + '.%(ext)s')
-        print(i)
+        # print(i)
         # get_video(result[i], str(i + 1))
 
     # os.system('youtube-dl -ciw -o "downloads\\%(autonumber)s.%(ext)s" --batch-file="batch-file.txt"')
-    #0:01:45.883288
+
     string = ''
-    for i in range(20 + 1):
+    for i in range(len(result)):
         string = string + 'downloads\\' + '' + str(i + 1) + '.ts' + '|'
 
     os.system('ffmpeg -i "concat:' + string + '" -c copy -bsf:a aac_adtstoasc input.mp4')
