@@ -5,6 +5,8 @@ import lxml.html
 import json
 import os
 import datetime
+from lxml import html
+import re
 
 headers_mobile = { 'User-Agent' : 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B137 Safari/601.1'}
 headers_postman = {
@@ -90,29 +92,7 @@ def get_video(url, file_name):
     return 'done'
 
 
-if __name__ == "__main__":
-    # url = str(input("Enter url video: "))
-    url = "https://www.watchlakorn.in/%E0%B8%AD%E0%B8%87%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%81%E0%B8%A9%E0%B9%8C%E0%B8%9E%E0%B8%B4%E0%B8%97%E0%B8%B1%E0%B8%81%E0%B8%A9%E0%B9%8C%E0%B8%8B%E0%B8%B8%E0%B8%99%E0%B8%A2%E0%B8%B1%E0%B8%94%E0%B9%80%E0%B8%8B%E0%B9%87%E0%B8%99%E0%B8%95%E0%B8%AD%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%885%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%8820%E0%B8%81%E0%B8%B8%E0%B8%A1%E0%B8%A0%E0%B8%B2%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B8%98%E0%B9%8C2562-video-263371"
-
-    start = datetime.datetime.now()
-
-    result = getPlayList(url)
-    print("Downloading...")
-    for i in range(len(result)):
-        # if i > 10:
-        #     break
-        os.system('youtube-dl ' + result[i] + ' --output downloads\\' + str(i + 1) + '.%(ext)s')
-        # print(i)
-        # get_video(result[i], str(i + 1))
-
-    # os.system('youtube-dl -ciw -o "downloads\\%(autonumber)s.%(ext)s" --batch-file="batch-file.txt"')
-
-    string = ''
-    for i in range(len(result)):
-        string = string + 'downloads\\' + '' + str(i + 1) + '.ts' + '|'
-
-    os.system('ffmpeg -i "concat:' + string + '" -c copy -bsf:a aac_adtstoasc input.mp4')
-    delete_all_video()
+def scale_video():
     os.system('ffmpeg -ss 00:00:50 -y -i "input.mp4"  -i 556330.png -filter_complex "[0:v]eq=brightness=0.05:contrast='
               '0.8:saturation=2:gamma_b=1.0,pad=iw+4:ih+4:2:2:color=white, scale=566:340[v1];movie=xoabg.mp4:loop=999,'
               'setpts=N/(FRAME_RATE*TB), scale = 854:480, setdar =16/9[v2];[v2][v1]overlay=shortest=1:x=-10:y=-10 [v3];'
@@ -131,7 +111,142 @@ if __name__ == "__main__":
               'etadata TIT1="" -metadata TIT3="" -metadata disc="" -metadata TKEY="" -metadata TBPM="" -metadata langu'
               'age="eng" -metadata encoder="" -threads 0 -preset veryfast "output.mp4')
 
-    end = datetime.datetime.now()
+    return "output.mp4"
 
-    print(end - start)
 
+def get_source_links(stt_id):
+    # read file get arr website avail
+    fo = open(stt_id + "/source-links.txt", "r")
+    arr_website_avail = []
+    lines = fo.readlines()
+
+    for line in lines:
+        arr_website_avail.append(line.replace('\n', ''))
+    fo.close()
+
+    return arr_website_avail
+
+
+def check_exist_chapt(id_series, id_chapt_new, stt_id):
+    name_file = stt_id + "/save-data.txt"
+
+    fo = open(name_file, "r")
+
+    lines = fo.readlines()
+    # format series:chapt,chapt\n
+    for line in lines:
+        arr_split = line.split(':')
+        if (len(arr_split) > 1):
+            series_current = arr_split[0]
+            list_chapt_current = arr_split[1].replace('\n', '').split(',')
+
+            if (str(series_current) == str(id_series)):
+                if str(id_chapt_new) in list_chapt_current:
+                    return False
+    fo.close()
+    return True
+
+
+def save_to_file(id_series, id_chapt_new, stt_id):
+    name_file = stt_id + "/save-data.txt"
+
+    fo = open(name_file, "r")
+    lines = fo.readlines()
+    check = True
+    i = 0
+    len_lines = len(lines)
+    n = '\n'
+    # format series:chapt,chapt\n
+    for line in lines:
+        arr_split = line.split(':')
+        if (len(arr_split) > 1):
+            series_current = arr_split[0]
+            list_chapt_current = arr_split[1].replace('\n', '')
+
+            if (i == len_lines - 1):
+                n = ''
+            if (str(series_current) == str(id_series)):
+                list_chapt_current = str(id_series) + ':' + str(list_chapt_current) + ',' + str(id_chapt_new) + n
+                lines[i] = list_chapt_current
+                check = False
+        i = i + 1
+    if (check):
+        if (len(lines) > 0):
+            lines[len(lines) - 1] = lines[len(lines) - 1] + '\n'
+        lines.append(str(id_series) + ':' + id_chapt_new)
+    fo.close()
+
+    fo = open(name_file, "w")
+    fo.writelines(lines)
+    fo.close()
+    return True
+
+
+def get_new_video(id_series, stt_web):
+    url = "https://www.watchlakorn.in/feed/" + str(id_series) + "/rss.xml"
+    req = requests.get(url)
+
+    be = BeautifulSoup(req.content, 'lxml')
+
+    arr_str = be.find_all('item')
+    print((arr_str[1]))
+
+    # root = html.fromstring(req.content)
+    # category = root.xpath('//item')
+    #
+    # if len(category) > 0 and check_exist_chapt(id_series, len(category), stt_web):
+    #     for item in category:
+    #         title = item.xpath('title/text()')[0]
+    #         print(item.xpath('pubDate/text()'))
+    #         link = item.xpath('link/text()')[0]
+    #         description = item.xpath('description/text()')[0]
+    #
+    #         return {
+    #             'title': title,
+    #             'link': link,
+    #             'description': description
+    #         }
+    #
+    # return False
+
+
+def handle(id_series, stt_web):
+    arr = get_new_video(id_series, stt_web)
+    return 1
+    if arr != False:
+        title = str(arr['title'])
+        description = str(arr['description'])
+        url = arr['link']
+
+        print(title)
+        print(description)
+        print(url)
+
+        # start = datetime.datetime.now()
+        #
+        # result = getPlayList(url)
+        # print("Downloading...")
+        # for i in range(len(result)):
+        #     # if i > 10:
+        #     #     break
+        #     os.system('youtube-dl ' + result[i] + ' --output downloads\\' + str(i + 1) + '.%(ext)s')
+        #
+        # string = ''
+        # for i in range(len(result)):
+        #     string = string + 'downloads\\' + '' + str(i + 1) + '.ts' + '|'
+        #
+        # os.system('ffmpeg -i "concat:' + string + '" -c copy -bsf:a aac_adtstoasc input.mp4')
+        # delete_all_video()
+        #
+        #
+        # end = datetime.datetime.now()
+        #
+        # print(end - start)
+
+
+if __name__ == '__main__':
+    stt_id = str(input("Enter id: "))
+    arr_website_avail = get_source_links(stt_id)
+
+    for id in arr_website_avail:
+        handle(id, stt_id)
