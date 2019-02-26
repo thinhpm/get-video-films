@@ -71,7 +71,7 @@ def getPlayList(url):
 
 
 def delete_all_video():
-    pwd = os.getcwd() + '\\downloads\\'
+    pwd = os.getcwd() + '/downloads/'
 
     filelist = os.listdir(pwd)
     list_file_delete_1 = []
@@ -80,7 +80,7 @@ def delete_all_video():
             list_file_delete_1.append(fichier)
 
     for file in list_file_delete_1:
-        os.remove(pwd + file)
+        os.remove(pwd + '/' + file)
 
 
 def get_video(url, file_name):
@@ -225,7 +225,7 @@ def get_description(id_video):
 
 
 def get_string_video():
-    pwd = os.getcwd() + '\\downloads\\'
+    pwd = os.getcwd() + '/downloads'
 
     filelist = os.listdir(pwd)
     list_file_delete_1 = []
@@ -235,18 +235,24 @@ def get_string_video():
 
     string = ''
 
+    list_file_delete_1.sort()
+
     for file in list_file_delete_1:
-        string = string + 'downloads\\' + str(file) + '|'
+        string = string + 'downloads/' + str(file) + '|'
 
     return string[:-1]
 
 
 def upload_youtube_and_check_out_number(title, description, tags, file_name, thumbnail, stt_id):
     #'--thumbnail=' + thumbnail,
-    process = subprocess.Popen(['youtube-upload', '--title=' + str(title) + '', '--tags=' + tags + '', '--thumbnail=' + thumbnail, '--description=' + description + '', '--client-secrets=' + stt_id + '/client_secrets.json', '--credentials-file=' + stt_id + '/credentials.json', file_name], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    stdout, stderr = process.communicate()
-    print(stdout)
-    return 'Video URL' in str(stdout)
+
+    arr = ['youtube-upload', '--title="' + str(title) + '"', '--tags=' + tags + '', '--description=' + description + '', '--client-secrets=' + stt_id + '/client_secrets.json', '--credentials-file=' + stt_id + '/credentials.json', file_name]
+    print(arr)
+    result = subprocess.run(arr, stdout=subprocess.PIPE)
+
+    print(result.stdout)
+    return len(result.stdout) > 0
+    # return 'Video URL' in str(result.stdout)
 
 
 def isFirstUpload(stt_id):
@@ -266,9 +272,6 @@ def handle(id_series, stt_id, option):
         title = str(arr['title'])
         description = str(get_description(arr['id_video']))
 
-        title = 'video funny moment'
-        description = 'video funny moment'
-
         url = arr['link']
         thumbnail = arr['thumbnail']
 
@@ -277,9 +280,12 @@ def handle(id_series, stt_id, option):
 
         print("Downloading...")
         for i in range(len(result)):
-            # if i > 10:
-            #     break
-            os.system('youtube-dl ' + result[i] + ' --output downloads\\' + ("00" + str(i + 1))[-3:] + '.%(ext)s')
+            if i > 5:
+                break
+            if stt_id == '2':
+                if i > 5:
+                    break
+            os.system('youtube-dl "' + result[i] + '" --output "downloads/' + str(("00" + str(i + 1))[-3:]) + '.%(ext)s"')
 
         string = get_string_video()
 
@@ -321,7 +327,7 @@ def handle(id_series, stt_id, option):
 
         print('Done!')
         save_to_file(id_series, arr['id_video'], stt_id)
-        time.sleep(150)
+        time.sleep(100)
 
         end = datetime.datetime.now()
 
