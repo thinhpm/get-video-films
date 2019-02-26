@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b4b09469-1857-4e93-b1bc-c0f96d644de4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/get-video-films.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/get-video-films.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/watchlakorn/batch-file.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlakorn/1/client_secrets.json" beforeDir="false" afterPath="$PROJECT_DIR$/watchlakorn/1/client_secrets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlakorn/1/credentials.json" beforeDir="false" afterPath="$PROJECT_DIR$/watchlakorn/1/credentials.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlakorn/1/save-data.txt" beforeDir="false" afterPath="$PROJECT_DIR$/watchlakorn/1/save-data.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlakorn/1/source-links.txt" beforeDir="false" afterPath="$PROJECT_DIR$/watchlakorn/1/source-links.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/watchlakorn/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/watchlakorn/test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,24 +19,31 @@
     <session id="826963409">
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1139" />
+          <entry key="json" value="2" />
+          <entry key="py" value="1170" />
+          <entry key="txt" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="1139" />
+          <entry key="JSON" value="2" />
+          <entry key="PLAIN_TEXT" value="6" />
+          <entry key="Python" value="1170" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="gitignore" value="1" />
+          <entry key="json" value="2" />
           <entry key="py" value="4" />
           <entry key="pyi" value="1" />
-          <entry key="txt" value="1" />
+          <entry key="txt" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="JSON" value="2" />
+          <entry key="PLAIN_TEXT" value="6" />
           <entry key="Python" value="4" />
           <entry key="PythonStub" value="1" />
         </counts>
@@ -44,23 +52,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://D:/shareee/myproject/python/slientclone375/core.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="33" column="74" selection-start-line="33" selection-start-column="52" selection-end-line="33" selection-end-column="74" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/watchlakorn/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="283" column="31" lean-forward="true" selection-start-line="283" selection-start-column="31" selection-end-line="283" selection-end-column="31" />
+            <state relative-caret-position="193">
+              <caret line="279" column="17" lean-forward="true" selection-start-line="279" selection-start-column="17" selection-end-line="280" selection-end-column="23" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
                 <element signature="e#335#1239#0" />
@@ -73,31 +69,7 @@
                 <element signature="e#5907#6896#0" />
                 <element signature="e#6942#7823#0" />
                 <element signature="e#8093#8455#0" />
-                <marker date="1551161619881" expanded="true" signature="8096:9214" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../core-youtube/core.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="334" column="65" selection-start-line="329" selection-start-column="20" selection-end-line="334" selection-end-column="65" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../web/core-website/get-voucher/bloggiamgia/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="60" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="60" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
+                <marker date="1551164181127" expanded="true" signature="8096:9214" ph="..." />
               </folding>
             </state>
           </provider>
@@ -117,9 +89,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/watchlakorn/1/source-links.txt" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/../core-youtube/core.py" />
+        <option value="$PROJECT_DIR$/watchlakorn/1/client_secrets.json" />
+        <option value="$PROJECT_DIR$/watchlakorn/1/credentials.json" />
+        <option value="$PROJECT_DIR$/watchlakorn/1/save-data.txt" />
+        <option value="$PROJECT_DIR$/watchlakorn/1/source-links.txt" />
         <option value="$PROJECT_DIR$/watchlakorn/test.py" />
       </list>
     </option>
@@ -226,7 +201,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.2624729" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2624729" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -244,21 +219,7 @@
     <entry file="file://$PROJECT_DIR$/watchlakorn/test2.py" />
     <entry file="file://$PROJECT_DIR$/../../pythonGUI/main.py" />
     <entry file="file://$PROJECT_DIR$/../../core-website/get-voucher/magiamgia.com/main.py" />
-    <entry file="file://$PROJECT_DIR$/watchlakorn/1/source-links.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="4" lean-forward="true" selection-start-column="4" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../film-youtube/discovery/core.py" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="7" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../reup-youtube/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1258">
@@ -302,13 +263,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="7" lean-forward="true" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/watchlakorn/1/source-links.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="4" lean-forward="true" selection-start-column="4" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/watchlakorn/1/save-data.txt">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/watchlakorn/1/credentials.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="40" lean-forward="true" selection-start-column="40" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/watchlakorn/1/client_secrets.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="426" selection-start-column="426" selection-end-column="426" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/watchlakorn/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="283" column="31" lean-forward="true" selection-start-line="283" selection-start-column="31" selection-end-line="283" selection-end-column="31" />
+        <state relative-caret-position="193">
+          <caret line="279" column="17" lean-forward="true" selection-start-line="279" selection-start-column="17" selection-end-line="280" selection-end-column="23" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
             <element signature="e#335#1239#0" />
@@ -321,7 +314,7 @@
             <element signature="e#5907#6896#0" />
             <element signature="e#6942#7823#0" />
             <element signature="e#8093#8455#0" />
-            <marker date="1551161619881" expanded="true" signature="8096:9214" ph="..." />
+            <marker date="1551164181127" expanded="true" signature="8096:9214" ph="..." />
           </folding>
         </state>
       </provider>

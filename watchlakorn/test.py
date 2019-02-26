@@ -265,6 +265,10 @@ def handle(id_series, stt_id, option):
     if arr != False:
         title = str(arr['title'])
         description = str(get_description(arr['id_video']))
+
+        title = 'video funny moment'
+        description = 'video funny moment'
+
         url = arr['link']
         thumbnail = arr['thumbnail']
 
@@ -273,8 +277,8 @@ def handle(id_series, stt_id, option):
 
         print("Downloading...")
         for i in range(len(result)):
-            if i > 10:
-                break
+            # if i > 10:
+            #     break
             os.system('youtube-dl ' + result[i] + ' --output downloads\\' + ("00" + str(i + 1))[-3:] + '.%(ext)s')
 
         string = get_string_video()
