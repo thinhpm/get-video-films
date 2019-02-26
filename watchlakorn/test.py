@@ -5,8 +5,9 @@ import lxml.html
 import json
 import os
 import datetime
-from lxml import html
+import subprocess
 import re
+import time
 
 headers_mobile = { 'User-Agent' : 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B137 Safari/601.1'}
 headers_postman = {
@@ -70,7 +71,7 @@ def getPlayList(url):
 
 
 def delete_all_video():
-    pwd = os.getcwd() + '\\downloads\\'
+    pwd = os.getcwd() + '/downloads/'
 
     filelist = os.listdir(pwd)
     list_file_delete_1 = []
@@ -79,7 +80,7 @@ def delete_all_video():
             list_file_delete_1.append(fichier)
 
     for file in list_file_delete_1:
-        os.remove(pwd + file)
+        os.remove(pwd + '/' + file)
 
 
 def get_video(url, file_name):
@@ -185,68 +186,158 @@ def save_to_file(id_series, id_chapt_new, stt_id):
 def get_new_video(id_series, stt_web):
     url = "https://www.watchlakorn.in/feed/" + str(id_series) + "/rss.xml"
     req = requests.get(url)
-
     be = BeautifulSoup(req.content, 'lxml')
 
     arr_str = be.find_all('item')
-    print((arr_str[1]))
 
-    # root = html.fromstring(req.content)
-    # category = root.xpath('//item')
-    #
-    # if len(category) > 0 and check_exist_chapt(id_series, len(category), stt_web):
-    #     for item in category:
-    #         title = item.xpath('title/text()')[0]
-    #         print(item.xpath('pubDate/text()'))
-    #         link = item.xpath('link/text()')[0]
-    #         description = item.xpath('description/text()')[0]
-    #
-    #         return {
-    #             'title': title,
-    #             'link': link,
-    #             'description': description
-    #         }
-    #
-    # return False
+    if len(arr_str) > 0:
+        for item in arr_str:
+            string_item = str(item)
+            id_video = re.findall(r'video-(.*?) ', string_item)[0]
+
+            if check_exist_chapt(id_series, id_video, stt_web):
+                title = item.find('title').string
+                title = title.replace(' - WatchLaKorn', '')
+                link = re.findall(r'<link/>(.*?) ', string_item)[0]
+                thumbnail = item.find('media:thumbnail').get('url')
+
+                return {
+                    'title': title,
+                    'link': link,
+                    'thumbnail': thumbnail,
+                    'id_video': id_video
+                }
+
+            break
+
+    return False
 
 
-def handle(id_series, stt_web):
-    arr = get_new_video(id_series, stt_web)
-    return 1
+def get_description(id_video):
+    url = "https://www.watchlakorn.in/feed/" + str(id_video) + "/view.xml"
+
+    req = requests.get(url)
+    be = BeautifulSoup(req.content, 'lxml')
+
+    des = be.find("description").string
+
+    return des
+
+
+def get_string_video():
+    pwd = os.getcwd() + '/downloads'
+
+    filelist = os.listdir(pwd)
+    list_file_delete_1 = []
+    for fichier in filelist[:]:
+        if (fichier.endswith('.ts')):
+            list_file_delete_1.append(fichier)
+
+    string = ''
+
+    list_file_delete_1.sort()
+
+    for file in list_file_delete_1:
+        string = string + 'downloads/' + str(file) + '|'
+
+    return string[:-1]
+
+
+def upload_youtube_and_check_out_number(title, description, tags, file_name, thumbnail, stt_id):
+    #'--thumbnail=' + thumbnail,
+
+    arr = ['youtube-upload', '--title="' + str(title) + '"', '--tags=' + tags + '', '--description=' + description + '', '--client-secrets=' + stt_id + '/client_secrets.json', '--credentials-file=' + stt_id + '/credentials.json', file_name]
+    print(arr)
+    result = subprocess.run(arr, stdout=subprocess.PIPE)
+
+    print(result.stdout)
+    return len(result.stdout) > 0
+    # return 'Video URL' in str(result.stdout)
+
+
+def isFirstUpload(stt_id):
+    f = open(stt_id + '/credentials.json', 'r')
+    lines = f.readlines()
+    f.close()
+    if(len(lines) == 0):
+        return True
+
+    return False
+
+
+def handle(id_series, stt_id, option):
+    arr = get_new_video(id_series, stt_id)
+
     if arr != False:
         title = str(arr['title'])
-        description = str(arr['description'])
+        description = str(get_description(arr['id_video']))
+
         url = arr['link']
+        thumbnail = arr['thumbnail']
 
-        print(title)
-        print(description)
-        print(url)
+        start = datetime.datetime.now()
+        result = getPlayList(url.encode('utf-8'))
 
-        # start = datetime.datetime.now()
-        #
-        # result = getPlayList(url)
-        # print("Downloading...")
-        # for i in range(len(result)):
-        #     # if i > 10:
-        #     #     break
-        #     os.system('youtube-dl ' + result[i] + ' --output downloads\\' + str(i + 1) + '.%(ext)s')
-        #
-        # string = ''
-        # for i in range(len(result)):
-        #     string = string + 'downloads\\' + '' + str(i + 1) + '.ts' + '|'
-        #
-        # os.system('ffmpeg -i "concat:' + string + '" -c copy -bsf:a aac_adtstoasc input.mp4')
-        # delete_all_video()
-        #
-        #
-        # end = datetime.datetime.now()
-        #
-        # print(end - start)
+        print("Downloading...")
+        for i in range(len(result)):
+            if i > 5:
+                break
+            if stt_id == '2':
+                if i > 5:
+                    break
+            os.system('youtube-dl "' + result[i] + '" --output "downloads/' + str(("00" + str(i + 1))[-3:]) + '.%(ext)s"')
+
+        string = get_string_video()
+
+        os.system('ffmpeg -i "concat:' + string + '" -c copy -bsf:a aac_adtstoasc input.mp4')
+        delete_all_video()
+        file_name = 'input.mp4'
+
+        if option == 'download':
+            print(1)
+            return
+
+        if option == 'render_and_upload':
+            print(2)
+            file_name = scale_video()
+
+        if option == 'download_and_render':
+            file_name = scale_video()
+            print(3)
+            return
+        print(4)
+        if (isFirstUpload(stt_id)):
+            os.system('youtube-upload --title="' + str(
+                title) + '" --description="' + description + '" --tags="' + '' + '" ' + '--client-secrets=' +
+                      stt_id + '/client_secrets.json --credentials-file=' + str(stt_id) + '/credentials.json ' + str(file_name))
+
+            check = True
+        else:
+            check = upload_youtube_and_check_out_number(title, description, '', str(file_name), thumbnail, stt_id)
+
+        os.remove('input.mp4')
+
+        if file_name == 'output.mp4':
+            os.remove('output.mp4')
+
+        if (check == False):
+            print('Waiting next turn')
+            time.sleep(7200)
+            return
+
+        print('Done!')
+        save_to_file(id_series, arr['id_video'], stt_id)
+        time.sleep(100)
+
+        end = datetime.datetime.now()
+
+        print(end - start)
 
 
 if __name__ == '__main__':
+    option = 'upload'
     stt_id = str(input("Enter id: "))
     arr_website_avail = get_source_links(stt_id)
 
     for id in arr_website_avail:
-        handle(id, stt_id)
+        handle(id, stt_id, option)
