@@ -335,9 +335,15 @@ def handle(id_series, stt_id, option):
 
 
 if __name__ == '__main__':
-    option = 'upload'
-    stt_id = str(input("Enter id: "))
-    arr_website_avail = get_source_links(stt_id)
+    option_handle = str(input("Enter id: "))
 
-    for id in arr_website_avail:
-        handle(id, stt_id, option)
+    if option_handle != 'auto':
+        handle(option_handle, '1', 'download')
+
+    else:
+        option = 'upload'
+        stt_id = str(input("Enter id: "))
+        arr_website_avail = get_source_links(stt_id)
+
+        for id in arr_website_avail:
+            handle(id, stt_id, option)
