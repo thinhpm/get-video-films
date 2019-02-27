@@ -282,7 +282,7 @@ def handle(id_series, stt_id, option):
         for i in range(len(result)):
             # if i > 5:
             #     break
-            if stt_id == '2':
+            if stt_id != '1':
                 if i > 15:
                     break
             os.system('youtube-dl "' + result[i] + '" --output "downloads/' + str(("00" + str(i + 1))[-3:]) + '.%(ext)s"')
