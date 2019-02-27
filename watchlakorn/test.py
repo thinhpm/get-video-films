@@ -280,10 +280,10 @@ def handle(id_series, stt_id, option):
 
         print("Downloading...")
         for i in range(len(result)):
-            if i > 5:
-                break
+            # if i > 5:
+            #     break
             if stt_id == '2':
-                if i > 5:
+                if i > 15:
                     break
             os.system('youtube-dl "' + result[i] + '" --output "downloads/' + str(("00" + str(i + 1))[-3:]) + '.%(ext)s"')
 
@@ -294,7 +294,8 @@ def handle(id_series, stt_id, option):
         file_name = 'input.mp4'
 
         if option == 'download':
-            print(1)
+            print(title)
+            save_to_file(id_series, arr['id_video'], stt_id)
             return
 
         if option == 'render_and_upload':
@@ -303,7 +304,7 @@ def handle(id_series, stt_id, option):
 
         if option == 'download_and_render':
             file_name = scale_video()
-            print(3)
+            print(title)
             return
         print(4)
         if (isFirstUpload(stt_id)):
