@@ -251,7 +251,7 @@ def get_string_video():
 def upload_youtube_and_check_out_number(title, description, tags, file_name, thumbnail, stt_id):
     stdout = subprocess.check_output(['youtube-upload', '--title=' + str(title) + '', '--tags="' + str(tags) + '"',
                                       '--description=' + str(description) + '',
-                                      '--client-secrets=' + str(stt_id) + '/client_secrets.json',
+                                      '--client-secrets=client_secrets.json',
                                       '--credentials-file=' + str(stt_id) + '/credentials.json', str(file_name)])
     #'--thumbnail=' + thumbnail,
     #
@@ -318,8 +318,7 @@ def handle(id_series, stt_id, option):
         print(4)
         if (isFirstUpload(stt_id)):
             os.system('youtube-upload --title="' + str(
-                title) + '" --description="' + description + '" --tags="' + '' + '" ' + '--client-secrets=' +
-                      stt_id + '/client_secrets.json --credentials-file=' + str(stt_id) + '/credentials.json ' + str(file_name))
+                title) + '" --description="' + description + '" --tags="' + '' + '" ' + '--client-secrets=client_secrets.json --credentials-file=' + str(stt_id) + '/credentials.json ' + str(file_name))
 
             check = True
         else:
