@@ -249,8 +249,8 @@ def get_string_video():
 
 
 def upload_youtube_and_check_out_number(title, description, tags, file_name, thumbnail, stt_id):
-    stdout = subprocess.check_output(['youtube-upload', '--title="' + str(title) + '"', '--tags="' + str(tags) + '"',
-                                      '--description="' + str(description) + '"',
+    stdout = subprocess.check_output(['youtube-upload', '--title=' + str(title) + '', '--tags="' + str(tags) + '"',
+                                      '--description=' + str(description) + '',
                                       '--client-secrets=' + str(stt_id) + '/client_secrets.json',
                                       '--credentials-file=' + str(stt_id) + '/credentials.json', str(file_name)])
     #'--thumbnail=' + thumbnail,
