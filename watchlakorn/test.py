@@ -198,6 +198,11 @@ def get_new_video(id_series, stt_web):
             if check_exist_chapt(id_series, id_video, stt_web):
                 title = item.find('title').string
                 title = title.replace(' - WatchLaKorn', '')
+
+                index = title.rfind('-')
+                title = title[:index]
+                title = title.replace(' 2562', '')
+
                 link = re.findall(r'<link/>(.*?) ', string_item)[0]
                 thumbnail = item.find('media:thumbnail').get('url')
 
