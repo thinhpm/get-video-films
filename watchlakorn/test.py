@@ -244,14 +244,18 @@ def get_string_video():
 
 
 def upload_youtube_and_check_out_number(title, description, tags, file_name, thumbnail, stt_id):
+    stdout = subprocess.check_output(['youtube-upload', '--title="' + str(title) + '"', '--tags="' + str(tags) + '"',
+                                      '--description="' + str(description) + '"',
+                                      '--client-secrets=' + str(stt_id) + '/client_secrets.json',
+                                      '--credentials-file=' + str(stt_id) + '/credentials.json', str(file_name)])
     #'--thumbnail=' + thumbnail,
+    #
+    # arr = ['youtube-upload', '--title="' + str(title) + '"', '--tags=' + tags + '', '--description=' + description + '', '--client-secrets=' + stt_id + '/client_secrets.json', '--credentials-file=' + stt_id + '/credentials.json', file_name]
+    # print(arr)
+    # result = subprocess.run(arr, stdout=subprocess.PIPE)
 
-    arr = ['youtube-upload', '--title="' + str(title) + '"', '--tags=' + tags + '', '--description=' + description + '', '--client-secrets=' + stt_id + '/client_secrets.json', '--credentials-file=' + stt_id + '/credentials.json', file_name]
-    print(arr)
-    result = subprocess.run(arr, stdout=subprocess.PIPE)
-
-    print(result.stdout)
-    return len(result.stdout) > 0
+    print(stdout)
+    return len(stdout) > 0
     # return 'Video URL' in str(result.stdout)
 
 
@@ -283,7 +287,7 @@ def handle(id_series, stt_id, option):
             # if i > 5:
             #     break
             if stt_id != '1':
-                if i > 15:
+                if i > 30:
                     break
             os.system('youtube-dl "' + result[i] + '" --output "downloads/' + str(("00" + str(i + 1))[-3:]) + '.%(ext)s"')
 
@@ -323,7 +327,7 @@ def handle(id_series, stt_id, option):
 
         if (check == False):
             print('Waiting next turn')
-            time.sleep(7200)
+            # time.sleep(7200)
             return
 
         print('Done!')
@@ -339,7 +343,7 @@ if __name__ == '__main__':
     option_handle = str(input("Enter id: "))
 
     if option_handle != 'auto':
-        handle(option_handle, '1', 'download')
+        handle(option_handle, '2', 'download')
 
     else:
         option = 'upload'
@@ -348,3 +352,4 @@ if __name__ == '__main__':
 
         for id in arr_website_avail:
             handle(id, stt_id, option)
+
