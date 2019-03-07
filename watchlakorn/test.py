@@ -70,8 +70,8 @@ def getPlayList(url):
     return result
 
 
-def delete_all_video():
-    pwd = os.getcwd() + '/downloads/'
+def delete_all_video(stt_id):
+    pwd = os.getcwd() + '/' + str(stt_id) +'/downloads/'
 
     filelist = os.listdir(pwd)
     list_file_delete_1 = []
@@ -229,8 +229,8 @@ def get_description(id_video):
     return des
 
 
-def get_string_video():
-    pwd = os.getcwd() + '/downloads'
+def get_string_video(stt_id):
+    pwd = os.getcwd() + '/' + str(stt_id) + '/downloads'
 
     filelist = os.listdir(pwd)
     list_file_delete_1 = []
@@ -243,7 +243,7 @@ def get_string_video():
     list_file_delete_1.sort()
 
     for file in list_file_delete_1:
-        string = string + 'downloads/' + str(file) + '|'
+        string = string + str(stt_id) + '/downloads/' + str(file) + '|'
 
     return string[:-1]
 
@@ -291,16 +291,16 @@ def handle(id_series, stt_id, option):
         for i in range(len(result)):
             # if i > 5:
             #     break
-            if stt_id != '1':
+            if stt_id != '1' and stt_id != '5' and stt_id != '4' and stt_id != '3' and stt_id != '2':
                 if i > 30:
                     break
-            os.system('youtube-dl "' + result[i] + '" --output "downloads/' + str(("00" + str(i + 1))[-3:]) + '.%(ext)s"')
+            os.system('youtube-dl "' + result[i] + '" --output "' + str(stt_id) + '/downloads/' + str(("00" + str(i + 1))[-3:]) + '.%(ext)s"')
 
-        string = get_string_video()
+        string = get_string_video(stt_id)
 
-        os.system('ffmpeg -i "concat:' + string + '" -c copy -bsf:a aac_adtstoasc input.mp4')
-        delete_all_video()
-        file_name = 'input.mp4'
+        os.system('ffmpeg -i "concat:' + string + '" -c copy -bsf:a aac_adtstoasc ' + str(stt_id) + '/input.mp4')
+        delete_all_video(stt_id)
+        file_name = str(stt_id) + '/input.mp4'
 
         if option == 'download':
             print(title)
@@ -324,7 +324,7 @@ def handle(id_series, stt_id, option):
         else:
             check = upload_youtube_and_check_out_number(title, description, '', str(file_name), thumbnail, stt_id)
 
-        os.remove('input.mp4')
+        os.remove(str(stt_id) + '/input.mp4')
 
         if file_name == 'output.mp4':
             os.remove('output.mp4')
