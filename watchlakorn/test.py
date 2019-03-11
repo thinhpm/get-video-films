@@ -294,6 +294,7 @@ def handle(id_series, stt_id, option):
             if stt_id != '1' and stt_id != '5' and stt_id != '4' and stt_id != '3' and stt_id != '2':
                 if i > 30:
                     break
+
             os.system('youtube-dl "' + result[i] + '" --output "' + str(stt_id) + '/downloads/' + str(("00" + str(i + 1))[-3:]) + '.%(ext)s"')
 
         string = get_string_video(stt_id)
@@ -344,6 +345,7 @@ def handle(id_series, stt_id, option):
 
 
 if __name__ == '__main__':
+    check = True
     option_handle = str(input("Enter id: "))
 
     if option_handle != 'auto':
@@ -354,6 +356,12 @@ if __name__ == '__main__':
         stt_id = str(input("Enter id: "))
         arr_website_avail = get_source_links(stt_id)
 
-        for id in arr_website_avail:
-            handle(id, stt_id, option)
-
+        while check:
+            try:
+                for id in arr_website_avail:
+                    handle(id, stt_id, option)
+                print("22222222222222222")
+                check = False
+            except ConnectionError:
+                print("1111111111111111")
+                check = True
