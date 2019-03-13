@@ -354,6 +354,9 @@ if __name__ == '__main__':
     else:
         option = 'upload'
         stt_id = str(input("Enter id: "))
+        #arr_stt_id = ['5', '4', '3', '2', '1']
+
+        #for stt_id in arr_stt_id:
         arr_website_avail = get_source_links(stt_id)
 
         while check:
@@ -365,3 +368,4 @@ if __name__ == '__main__':
             except ConnectionError:
                 print("1111111111111111")
                 check = True
+        #print("Done")
