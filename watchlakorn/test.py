@@ -42,7 +42,7 @@ def getCodeV(content):
     return meta[index + 1:]
 
 
-def getPlayList(url):
+def getPlayList(url, id_series, stt_id):
     headers = {'referer' : url}
     re = requests.get(url, headers=headers_mobile)
     content = BeautifulSoup(re.content, 'lxml')
@@ -50,7 +50,7 @@ def getPlayList(url):
     code_v = getCodeV(re.content)
 
     url2 = "http://www.watchlakorn.in/content_jw6.php?v=" + code_v + "&kt=" + code_kt
-    print(url2)
+
     re2 = requests.get(url2, headers=headers)
     content = re2.content
 
@@ -58,6 +58,27 @@ def getPlayList(url):
 
     url_play_list = "https:" + (file[0]['file'])
     print(url_play_list)
+
+    if url_play_list.endswith('.mp4') or len(url_play_list) < 10 or 'youtube.com' in url_play_list:
+        add_to_black_lists(id_series, stt_id)
+
+        return False
+
+    arr_date = url_play_list.split("/")
+    date = arr_date[len(arr_date) - 3]
+    date2 = date.split("-")
+    year = date2[2]
+    month = date2[1]
+
+    if int(year) < 2019:
+        add_to_black_lists(id_series, stt_id)
+
+        return False
+
+    if int(month) < 3:
+
+        return False
+
     re3 = requests.get(url_play_list, headers=headers)
     content = re3.content
     arr = str(content).split('\\n')
@@ -126,6 +147,23 @@ def get_source_links(stt_id):
     fo.close()
 
     return arr_website_avail
+
+
+def get_black_lists(stt_id):
+    results = []
+    name_file = str(stt_id) + "/blacklists.txt"
+
+    fo = open(name_file, "r")
+
+    lines = fo.readlines()
+
+    for line in lines:
+        item = line.replace('\n', '')
+        results.append(item)
+
+    fo.close()
+
+    return results
 
 
 def check_exist_chapt(id_series, id_chapt_new, stt_id):
@@ -285,15 +323,21 @@ def handle(id_series, stt_id, option):
         thumbnail = arr['thumbnail']
 
         start = datetime.datetime.now()
-        result = getPlayList(url.encode('utf-8'))
+        result = getPlayList(url.encode('utf-8'), id_series, stt_id)
+
+        if result == False or len(result) == 0:
+            add_to_black_lists(id_series, stt_id)
+
+            return False
 
         print("Downloading...")
+
         for i in range(len(result)):
-            # if i > 5:
-            #     break
-            if stt_id != '1' and stt_id != '5' and stt_id != '4' and stt_id != '3' and stt_id != '2':
-                if i > 30:
+            if stt_id == '6' or stt_id == '8':
+                if i > 60:
                     break
+            if stt_id == '7' and i > 15:
+                break
 
             os.system('youtube-dl "' + result[i] + '" --output "' + str(stt_id) + '/downloads/' + str(("00" + str(i + 1))[-3:]) + '.%(ext)s"')
 
@@ -344,28 +388,48 @@ def handle(id_series, stt_id, option):
         print(end - start)
 
 
-if __name__ == '__main__':
+def add_to_black_lists(id_series, stt_id):
+    name_file = str(stt_id) + "/blacklists.txt"
+
+    fo = open(name_file, "a+")
+    fo.write(str(id_series) + '\n')
+    fo.close()
+
+
+def main(option, stt_id, arr_website_avail):
     check = True
+    black_lists = get_black_lists(stt_id)
+
+    while check:
+        try:
+            for id in arr_website_avail:
+                if id not in black_lists:
+                    try:
+                        handle(id, stt_id, option)
+                    except:
+                        print("buon")
+
+            check = False
+        except ConnectionError:
+            check = True
+    
+    print("Current is: " + str(stt_id))
+
+
+if __name__ == '__main__':
     option_handle = str(input("Enter id: "))
 
     if option_handle != 'auto':
-        handle(option_handle, '2', 'download')
-
+        stt_id = str(input("Enter id: "))
+        handle(option_handle, stt_id, 'download')
     else:
         option = 'upload'
         stt_id = str(input("Enter id: "))
-        #arr_stt_id = ['5', '4', '3', '2', '1']
 
-        #for stt_id in arr_stt_id:
         arr_website_avail = get_source_links(stt_id)
 
-        while check:
-            try:
-                for id in arr_website_avail:
-                    handle(id, stt_id, option)
-                print("22222222222222222")
-                check = False
-            except ConnectionError:
-                print("1111111111111111")
-                check = True
-        #print("Done")
+        while True:
+            main(option, stt_id, arr_website_avail)
+
+            print("waiting next turn!")
+            time.sleep(7200)
